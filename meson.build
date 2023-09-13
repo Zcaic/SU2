@@ -53,12 +53,13 @@ mpi = false
 
 # If custom mpi mode is enabled, include and library pathes for MPI have to be set manually to env variables
 if get_option('custom-mpi')
-  mpi_dep = []
+  mpi_inc=include_directories('C:/msmpi/dev/Include')
+  mpi_dep = [declare_dependency(include_directories:mpi_inc,link_args:['-LC:/msmpi/dev/Lib/x64','-lmsmpi'])]
   mpi = true
 # Otherwise they are automatically determined
 else
-  mpi_dep = [dependency('mpi', language:'c', required : get_option('with-mpi')),
-             dependency('mpi', language:'cpp', required : get_option('with-mpi'))]
+  mpi_dep = [dependency('mpi', language:'c', required : get_option('with-mpi'),method : 'system'),
+             dependency('mpi', language:'cpp', required : get_option('with-mpi'),method : 'system')]
   if mpi_dep[0].found() or mpi_dep[1].found()
     mpi = true
   endif
